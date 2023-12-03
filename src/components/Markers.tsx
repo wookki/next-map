@@ -24,19 +24,14 @@ const Markers = ({ map, stores, setCurrentStore }: MarkerProps) => {
           imageOption
         );
 
+        const markerPosition = new window.kakao.maps.LatLng(store?.lat, store?.lng);
+
         // 마커를 생성합니다
-        var marker = new window.kakao.maps.Marker({
+        const marker = new window.kakao.maps.Marker({
           position: markerPosition,
           image: markerImage // 마커이미지 설정 
         });
         // 마커가 표시될 위치입니다 
-        var markerPosition = new window.kakao.maps.LatLng(store?.lat, store?.lng);
-
-        // 마커를 생성합니다
-        var marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-          image: markerImage
-        });
 
         // 마커가 지도 위에 표시되도록 설정합니다
         marker.setMap(map);
