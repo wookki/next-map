@@ -1,25 +1,30 @@
-import { Fragment, useCallback, useEffect, useRef } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { StoreApiResponse, StoreType } from "@/interface";
 import axios from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/router";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import Loader from "@/components/Loader";
+import SearchFilter from "@/components/SearchFilter";
+import { StoreType } from "@/interface";
+import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { searchState } from "@/atom";
 
 export default function StoreListPage() {
   const router = useRouter();
-  const { page = '1' }: any = router.query;
   const ref = useRef<HTMLDivElement | null>(null)
   const pageRef = useIntersectionObserver(ref, {})
   const isPageEnd = !!pageRef?.isIntersecting
+  const searchValue = useRecoilValue(searchState)
+
 
   const fetchStores = async ({ pageParam }: { pageParam: number }) => {
     const { data } = await axios('/api/stores', {
       params: {
         limit: 10,
-        page: pageParam
+        page: pageParam,
+        ...searchValue
       }
     })
 
@@ -57,10 +62,11 @@ export default function StoreListPage() {
   return (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
+        <SearchFilter />
         {isLoading ? <Loading /> : stores?.pages?.map((page, index) => (
           <Fragment key={index}>
             {page.data.map((store: StoreType, index: number) => (
-              <li className="flex justify-between gap-x-6 py-5" key={index}>
+              <li className="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50" key={index} onClick={() => router.push(`/stores/${store.id}`)}>
                 <div className="flex gap-x-4">
                   <Image
                     src={

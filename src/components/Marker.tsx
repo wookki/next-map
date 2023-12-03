@@ -1,12 +1,14 @@
+import { mapState } from "@/atom";
 import { StoreType } from "@/interface";
-import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 interface MarkerProps {
-  map: any;
   store: StoreType
 }
 
-const Marker = ({ map, store }: MarkerProps) => {
+const Marker = ({ store }: MarkerProps) => {
+  const map = useRecoilValue(mapState)
   const loadKakaoMarker = useCallback(() => {
     if (map && store) {
       var imageSrc = store?.category

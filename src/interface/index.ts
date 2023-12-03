@@ -12,7 +12,18 @@ export interface StoreType {
 
 export interface StoreApiResponse {
   data: StoreType[],
-  totalPage?: number,
-  totalCount?: number,
-  page?: number
+  totalPage?: number;
+  totalCount?: number;
+  page?: number;
+}
+
+export interface LocationType {
+  lat?: string | null;
+  lng?: string | null;
+  zoom: number;
+}
+
+export interface SearchTypes {
+  q?: string;
+  district?: string;
 }
